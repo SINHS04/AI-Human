@@ -20,9 +20,12 @@ python run.py
 
 ### 입출력 명세
 1. 입력
+```
 user_input: str
+```
 
 2. 출력
+```
 response: Dict = {
     "answer": str,          # LLM 생성 답변
     "sources": List[Dict],  # 검색된 문서 리스트
@@ -34,3 +37,11 @@ response: Dict = {
     "success": bool,        # 성공 여부
     "mode": str            # "dual" | "lecture_only" | "textbook_only" | "llm_only"
 }
+```
+
+### 시스템 최적화
+1. config.yaml 파일
+    - llm_model: name > 원하는 모델 선택(google)
+    - rag: similarity_top_k > 문석 개수 설정
+2. prompt 파일
+    - qa_default.txt > 원하는 답변이 나오도록 프롬프트 구성
