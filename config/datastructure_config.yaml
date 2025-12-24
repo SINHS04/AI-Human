@@ -1,0 +1,87 @@
+# config/thermodynamics_config.yaml
+
+# Knowledge Base Selection
+knowledge_base_selection:
+  use_lecture_notes: true    # 강의자료 사용 여부
+  use_textbook: true         # 교재 사용 여부
+  # false, false: LLM only 모드
+  # true, false: 강의자료만
+  # false, true: 교재만
+  # true, true: 모두 사용
+
+# Query Translation (for English textbook)
+query_translation:
+  enabled: false              # 쿼리 번역 활성화
+  translate_for_textbook: false  # 교재 검색 시 영어로 번역
+  translation_model: "gemini"   # 번역에 사용할 모델
+
+# Model Configuration - 이중 임베딩 전략
+embedding_models:
+  korean:  # 강의자료용
+    name: "jinaai/jina-embeddings-v4"
+    device: "cuda"
+    max_length: 512
+  
+  english:  # 교재용
+    name: "jinaai/jina-embeddings-v4"
+    device: "cuda"
+    max_length: 512
+
+llm_model:
+  type: "gemini"
+  name: "gemini-2.0-flash"
+  temperature: 0.7
+  max_new_tokens: 512
+
+# Dual Vector Store Configuration
+vector_stores:
+  lecture_notes:  # 강의자료
+    type: "chroma"
+    persist_directory: "./db/datastructure-lecture-db"
+    collection_name: "lecture-notes"
+    embedding_model: "korean"
+  
+  textbook:  # 교재
+    type: "chroma"
+    persist_directory: "./db/datastructure-textbook-db"
+    collection_name: "textbook"
+    embedding_model: "korean"
+
+# RAG Configuration
+rag:
+  chunk_size: 512
+  chunk_overlap: 50
+  similarity_top_k: 5
+  
+  # 검색 가중치 (강의자료 vs 교재)
+  retrieval_weights:
+    lecture_notes: 0.5  # 강의자료에 50% 가중치
+    textbook: 0.5       # 교재에 50% 가중치
+  
+  response_mode: "compact"
+
+# Data Configuration - 이중 지식 베이스
+data:
+  lecture_notes:
+    knowledge_base_dir: "./data/knowledge_base/presentation"
+    file_pattern: "자료구조_kb.json"
+    language: "korean"
+    exclude_patterns:
+      - "**/temp/**"
+  
+  textbook:
+    knowledge_base_dir: "./data/knowledge_base/textbook"
+    file_pattern: "자료구조_kb.json"
+    language: "korean"
+    exclude_patterns:
+      - "**/temp/**"
+
+# Prompt Configuration
+prompt:
+  query_gen_prompt: "./prompt/ai-human/query_gen_prompt.txt"
+  qa_prompt: "./prompt/ai-human/qa_default.txt"
+
+streamlit:
+  page_title: "자료구조 과목 Q&A 챗봇"
+  page_icon: "🔥"
+  layout: "wide"
