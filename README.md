@@ -1,16 +1,17 @@
 # 자료구조 Q&A 챗봇
-### 이중 벡터 DB 기반 RAG 시스템
+## 이중 벡터 DB 기반 RAG 시스템
 
 ### 설치
+- python==3.12.12
 ```
 pip install -r requirements.txt
-echo "GEMINI_API_KEY=your_key" > .env
+export GEMINI_API_KEY='YOUR_API_KEY'
 ```
 
 ### 사용법
 1. 벡터 인덱스 빌드
 ```
-python build_dual_index.py --config ./config/datastructure_config.yaml
+python build_dual_index.py
 ```
 
 2. 챗봇 실행
